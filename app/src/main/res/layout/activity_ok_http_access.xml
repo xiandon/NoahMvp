@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.OkHttpAccess">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_ok_http_access_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="访问测试" />
+
+            <Button
+                android:id="@+id/btn_ok_http_access_winning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="胜负盘赛事列表" />
+
+            <Button
+                android:id="@+id/btn_ok_http_generate_signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="生成签名" />
+
+            <Button
+                android:id="@+id/btn_ok_http_card_bind_phone_verification_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="发送绑定手机号验证码" />
+
+            <Button
+                android:id="@+id/btn_ok_http_card_bind_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="绑定手机号" />
+
+            <EditText
+                android:id="@+id/et_ok_http_card_bind_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="绑定验证码" />
+
+            <Button
+                android:id="@+id/btn_ok_http_card_login_phone_verification_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="发送手机登陆号验证码" />
+
+            <EditText
+                android:id="@+id/et_ok_http_card_login_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="登陆验证码" />
+
+            <Button
+                android:id="@+id/btn_ok_http_card_login_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="登陆手机号" />
+
+            <Button
+                android:id="@+id/btn_ok_http_card_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="网页登陆" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
