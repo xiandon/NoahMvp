@@ -150,18 +150,17 @@ public class OkHttpAccess extends AppCompatActivity {
 
             case R.id.btn_ok_http_card_bind_phone_verification_code:
                 // 绑定手机号验证码
-                final HashMap<String, String> mapBindPhoneCode = new HashMap<String, String>();
-                mapBindPhoneCode.put("mobile", "13272678783");
+                HashMap<String, Object> mapGame = new HashMap<>();
+                mapGame.put("gameType", "HOT");
 
-                requestManager.requestAsyn(Constant.CARD_BIND_PHONE_CODE, 2, mapBindPhoneCode, new ReqCallBack<Object>() {
+
+                String jsonGame = new CreateSignature().verifySign(Constant.CARD_LOGIN_PHONE_CODE, mapGame);
+
+
+                okManager.postSendString(Constant.CARD_GAME_LIST_GAME, jsonGame, new OkManager.Fun4() {
                     @Override
-                    public void onReqFailed(String errorMsg) {
-
-                    }
-
-                    @Override
-                    public void onReqSuccess(Object result) {
-                        Log.i(TAG, "绑定手机验证码发送成功" + result.toString());
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.i(TAG, "访问成功" + jsonObject.toString());
                     }
                 });
 
@@ -189,7 +188,7 @@ public class OkHttpAccess extends AppCompatActivity {
                 // 生成签名
 
                 HashMap<String, Object> mapData = new HashMap<>();
-                mapData.put("mobile", "17623361027");
+                mapData.put("mobile", "15889566805");
 
 
                 String json = new CreateSignature().verifySign(Constant.CARD_LOGIN_PHONE_CODE, mapData);

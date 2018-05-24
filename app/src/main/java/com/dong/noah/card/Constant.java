@@ -8,10 +8,13 @@ public class Constant {
 
     public static String ZHANGHUI_URL = "http://kkone2me.com";
 
+    public static String CARD_URL = "http://guess.laikajj.com";
+
+    public static String CARD_CLIENT_ID = "36e9295f-5be7-46d8-bc86-539df21fcf5d";
+    public static String CARD_SECRET = "d854efca-7865-4377-9409-e9049ea03ab6";
 
 
-
-    public static String CARD_ = "";
+    public static String CARD_PROVIDER = "268";
 
 
     // 手机登陆
@@ -23,6 +26,7 @@ public class Constant {
     // 绑定手机号验证码
     public static String CARD_BIND_PHONE_CODE = "/smsCode/sendBind";
 
+    public static String CARD_GAME_LIST_GAME = "/common/quotate/game/listGames";
 
     //检验token有效性
     public static String CARD_TOKEN = "/auth/token/validate";

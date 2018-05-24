@@ -41,7 +41,7 @@ public class CreateSignature {
 
         JsonRequest jsonRequest = new JsonRequest();
 
-        jsonRequest.setRequestId("qwer1234asdf");
+        jsonRequest.setRequestId("asasqwer1234asdf");
         jsonRequest.setTimestamp(GetDate.getStamp() + "");
         jsonRequest.setVersion("1.0");
         jsonRequest.setClientId(Constant.CARD_CLIENT_ID);
@@ -71,7 +71,7 @@ public class CreateSignature {
         String signContent = sb.toString();
 
         // 第四步，第五步：签名
-        String signResult = encryptHMAC2(Constant.CARD_SECRET, signContent);
+        String signResult = encryptHMAC(Constant.CARD_SECRET, signContent);
         Log.i(TAG, "签名生成 = " + signResult);
 
         jsonRequest.setSign(signResult);
@@ -165,11 +165,11 @@ public class CreateSignature {
     private String encryptHMAC(String key, String content) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
-            SecretKey secretKey = new SecretKeySpec(key.getBytes("UTF-8"), mac.getAlgorithm());
+            SecretKey secretKey = new SecretKeySpec(key.getBytes("utf-8"), mac.getAlgorithm());
             mac.init(secretKey);
-            byte[] data = mac.doFinal(content.getBytes("UTF-8"));
+            byte[] data = mac.doFinal(content.getBytes("utf-8"));
             String base64Result = new BASE64Encoder().encode(data);
-            String sURLEncoder = URLEncoder.encode(base64Result, "UTF-8");
+            String sURLEncoder = URLEncoder.encode(base64Result, "utf-8");
             return sURLEncoder;
         } catch (Exception e) {
             return content;
