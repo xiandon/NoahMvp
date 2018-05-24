@@ -24,7 +24,7 @@ import okhttp3.Response;
 public class RequestManager {
 
 
-    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");//mdiatype 这个需要和服务端保持一致
+    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//mdiatype 这个需要和服务端保持一致
     private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");//mdiatype 这个需要和服务端保持一致
     private static final String TAG = RequestManager.class.getSimpleName();
     private static final String BASE_URL = Constant.CARD_URL;//请求接口根地址
@@ -94,6 +94,9 @@ public class RequestManager {
                 break;
             case TYPE_POST_FORM:
                 call = postFormByAsyn(url, paramsMap, callBack);
+                break;
+            case TYPE_POST_JSON_STR:
+                call = postJsonByAsynString(url, paramsMap, callBack);
                 break;
         }
         return call;
@@ -173,6 +176,54 @@ public class RequestManager {
             String requestUrl = String.format("%s/%s", BASE_URL, url);
 
             Log.i(TAG, "POST JSON异步请求URL = : " + requestUrl);
+
+            final Request request = addHeaders().url(requestUrl).post(body).build();
+            final Call call = mOkHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    failedCallBack("访问失败", callBack);
+                    Log.e(TAG, e.toString());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String string = response.body().string();
+                        Log.e(TAG, "response ----->" + string);
+                        successCallBack((T) string, callBack);
+                    } else {
+                        failedCallBack("服务器错误", callBack);
+                    }
+                }
+            });
+            return call;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+        return null;
+    }
+
+    /**
+     * OkHttp异步请求
+     * 提交JSON数据
+     *
+     * @param url       接口地址
+     * @param paramsMap 数据参数
+     * @param callBack  回调函数
+     * @param <T>       数据泛型
+     * @return
+     */
+    private <T> Call postJsonByAsynString(String url, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {
+        try {
+
+            String params = paramsMap.get("jsonUp");
+
+            Log.i(TAG, "JSON请求参数 = " + params);
+
+            RequestBody body = RequestBody.create(MEDIA_TYPE_JSON, params);
+
+            String requestUrl = BASE_URL + url;
 
             final Request request = addHeaders().url(requestUrl).post(body).build();
             final Call call = mOkHttpClient.newCall(request);
@@ -461,8 +512,7 @@ public class RequestManager {
      * @return Request.Builder
      */
     private Request.Builder addHeaders() {
-        Request.Builder builder = new Request.Builder().
-                addHeader("Content-Type", "application/json;charset=UTF-8 ");
+        Request.Builder builder = new Request.Builder().addHeader("content-type", "application/json;charset:utf-8");
         return builder;
     }
 }

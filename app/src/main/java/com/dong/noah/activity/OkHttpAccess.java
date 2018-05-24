@@ -21,11 +21,19 @@ import com.dong.noah.utils.PreferencesUtils;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class OkHttpAccess extends AppCompatActivity {
     @BindView(R.id.et_ok_http_card_bind_phone)
@@ -188,30 +196,48 @@ public class OkHttpAccess extends AppCompatActivity {
                 // 生成签名
 
                 HashMap<String, Object> mapData = new HashMap<>();
-                mapData.put("mobile", "15889566805");
+                mapData.put("mobile", "13272678783");
 
+                final String json = new CreateSignature().verifySign(Constant.CARD_LOGIN_PHONE_CODE, mapData);
 
-                String json = new CreateSignature().verifySign(Constant.CARD_LOGIN_PHONE_CODE, mapData);
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("jsonUp", json);
 
-
-                okManager.postSendString(Constant.CARD_LOGIN_PHONE_CODE, json, new OkManager.Fun4() {
+          /*      okManager.postSendString(Constant.CARD_LOGIN_PHONE_CODE, json, new OkManager.Fun4() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        Log.i(TAG, "访问成功" + jsonObject.toString());
+                        Log.i(TAG, "-------------" + jsonObject.toString());
+                    }
+                });*/
+
+
+                requestManager.requestAsyn(Constant.CARD_LOGIN_PHONE_CODE, 3, hashMap, new ReqCallBack<Object>() {
+                    @Override
+                    public void onReqFailed(String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onReqSuccess(Object result) {
+                        Log.i(TAG, "访问成功 = " + result);
                     }
                 });
+
 
                 break;
             case R.id.btn_ok_http_card_login_phone:
                 // 手机登陆
-                final HashMap<String, String> mapLoginPhone = new HashMap<String, String>();
-                mapLoginPhone.put("mobile", "15889566805");
-                mapLoginPhone.put("agentCode", "268");
-                mapLoginPhone.put("smsCode", etOkHttpCardLoginPhone.getText().toString());
-                mapLoginPhone.put("referee", "");
-                mapLoginPhone.put("channel", "");
+                HashMap<String, Object> mapLogin = new HashMap<>();
+                mapLogin.put("mobile", "13272678783");
+                mapLogin.put("agentCode", "268");
+                mapLogin.put("referee", "QQQ");
+                mapLogin.put("channel", "AAA");
+                mapLogin.put("smsCode", etOkHttpCardLoginPhone.getText().toString());
 
-                requestManager.requestAsyn(Constant.CARD_LOGIN_PHONE, 2, mapLoginPhone, new ReqCallBack<Object>() {
+                final String jsonLogin = new CreateSignature().verifySign(Constant.CARD_LOGIN_PHONE_CODE, mapLogin);
+                HashMap<String, String> hashMapLogin = new HashMap<>();
+                hashMapLogin.put("jsonUp", jsonLogin);
+                requestManager.requestAsyn(Constant.CARD_LOGIN_PHONE, 3, hashMapLogin, new ReqCallBack<Object>() {
                     @Override
                     public void onReqFailed(String errorMsg) {
 
@@ -225,6 +251,40 @@ public class OkHttpAccess extends AppCompatActivity {
 
                 break;
         }
+
     }
+
+    private void post(String s) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        //创建一个RequestBody(参数1：数据类型 参数2传递的json串)
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), s);
+        //创建一个请求对象
+        Request request = new Request.Builder()
+                .url("http://guess.laikajj.com/smsCode/sendAuth")
+//                .header("cookie", "JSESSIONID=EB36DE5E50E342D86C55DAE0CDDD4F6D")
+                .addHeader("content-type", "application/json;charset:utf-8")
+                .post(requestBody)       // 表单提交
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("fail", e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String res = response.body().string();
+                Log.e("success", res);
+
+            }
+        });
+
+
+    }
+
 
 }

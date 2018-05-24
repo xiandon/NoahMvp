@@ -36,8 +36,9 @@ public class OkManager {
     //提交json数据
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
+
     //提交字符串数据
-    private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown;charset=utf-8");
+    private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/json; charset=utf-8");
 
     private OkManager() {
         client = new OkHttpClient();
@@ -312,9 +313,12 @@ public class OkManager {
      * @param callback
      */
     public void postSendString(String url, String content, final Fun4 callback) {
-        String requestUrl = String.format("%s/%s", Constant.CARD_URL, url);
+        String requestUrl = Constant.CARD_URL + url;
         Log.i(TAG, "请求接口地址 = " + requestUrl);
-        Request request = new Request.Builder().url(requestUrl).post(RequestBody.create(MEDIA_TYPE_MARKDOWN, content)).build();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), content);
+
+        Request request = new Request.Builder().addHeader("content-type", "application/json;charset:utf-8").url(requestUrl).post(requestBody).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

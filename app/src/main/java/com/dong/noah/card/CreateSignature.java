@@ -43,6 +43,8 @@ public class CreateSignature {
 
         jsonRequest.setRequestId("asasqwer1234asdf");
         jsonRequest.setTimestamp(GetDate.getStamp() + "");
+//        jsonRequest.setRequestId("qwer1234asdf");
+//        jsonRequest.setTimestamp("1527164676000");
         jsonRequest.setVersion("1.0");
         jsonRequest.setClientId(Constant.CARD_CLIENT_ID);
         jsonRequest.setData(mapData);
@@ -51,16 +53,8 @@ public class CreateSignature {
         // jsonRequest 转为 map
         Map<String, Object> paramMap = bean2Map(jsonRequest);
         paramMap.remove("sign");
-        for (String key : paramMap.keySet()) {
-            String value = paramMap.get(key).toString();
-            Log.i(TAG, "参数导入 = " + key + ":" + value);
-        }
         // 第一步：参数排序
         Map<String, Object> sortedMap = sort(paramMap);
-        for (String key : sortedMap.keySet()) {
-            String value = sortedMap.get(key).toString();
-            Log.i(TAG, "参数排序 = " + key + ":" + value);
-        }
 
         // 第二步：拼接参数：key1Value1key2Value2
         String urlParams = groupStringParam(sortedMap);
@@ -69,6 +63,8 @@ public class CreateSignature {
         StringBuffer sb = new StringBuffer();
         sb.append(uri).append(urlParams).append(Constant.CARD_SECRET);
         String signContent = sb.toString();
+
+        Log.i(TAG, "拼接字符串 = " + signContent);
 
         // 第四步，第五步：签名
         String signResult = encryptHMAC(Constant.CARD_SECRET, signContent);
